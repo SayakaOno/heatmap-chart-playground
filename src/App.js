@@ -8,7 +8,7 @@ import w3color, { colorNames } from './w3color';
 const App = () => {
   const [pressureRange, setPressureRange] = useState(3);
   const [selectedColor, setSelectedColor] = useState(colorNames[2]);
-  const [showNumber, setShowNumber] = useState(true);
+  const [showNumber, setShowNumber] = useState(false);
   const [pressures, setPressures] = useState([]);
   const w3colorObj = w3color()(selectedColor);
   const hsl = w3colorObj.toHsl();
@@ -119,6 +119,11 @@ const App = () => {
             onChange={() => setShowNumber(!showNumber)}
           />
           <span>Show numbers</span>
+        </div>
+      </Col>
+      <Col span={10} style={{ height: '100vh', overflow: 'scroll' }}>
+        <div style={{ height: 1000, marginLeft: 30, background: 'yellow' }}>
+          aaa
         </div>
       </Col>
     </Row>
