@@ -4,11 +4,11 @@ import 'antd/dist/antd.css';
 import html2canvas from 'html2canvas';
 import Palette from './Palette';
 import './App.css';
-import w3color, { colorNames } from './w3color';
+import w3color, { usedColors } from './w3color';
 
 const App = () => {
   const [pressureRange, setPressureRange] = useState(3);
-  const [selectedColor, setSelectedColor] = useState(colorNames[2]);
+  const [selectedColor, setSelectedColor] = useState(usedColors[0]);
   const [showNumber, setShowNumber] = useState(false);
   const [pressures, setPressures] = useState([]);
   const [history, setHistory] = useState([]);
