@@ -6,7 +6,9 @@ import { colorNames } from './w3color';
 const Palette = props => {
   return (
     <>
-      <div style={{ margin: '15px 0 5px 0' }}>Color:</div>
+      <div style={{ margin: '15px 0 5px 0' }}>
+        Color: <b>{props.selectedColor}</b>
+      </div>
       <ul style={{ width: 200, margin: 0, padding: 0 }}>
         {colorNames.map(color => {
           return (
