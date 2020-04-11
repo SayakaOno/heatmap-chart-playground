@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, InputNumber, Switch, Button } from 'antd';
+import { Row, Col, InputNumber, Switch, Button, Radio, Input } from 'antd';
 import 'antd/dist/antd.css';
 import html2canvas from 'html2canvas';
 import Palette from './Palette';
 import './App.css';
-import w3color, { usedColors } from './w3color';
+import w3color, { usedColors, hexs } from './w3color';
+
+const mode = ['Color name', 'Hex'];
 
 const App = () => {
   const [pressureRange, setPressureRange] = useState(3);
@@ -12,8 +14,10 @@ const App = () => {
   const [showNumber, setShowNumber] = useState(false);
   const [pressures, setPressures] = useState([]);
   const [history, setHistory] = useState([]);
+  const [inputMode, setInputMode] = useState(mode[0]);
+  const [hex, setHex] = useState('#' + hexs[0]);
 
-  const w3colorObj = w3color()(selectedColor);
+  const w3colorObj = w3color()(inputMode === mode[0] ? selectedColor : hex);
   const hsl = w3colorObj.toHsl();
 
   useEffect(() => {
@@ -34,8 +38,8 @@ const App = () => {
 
   const getLightness = level => {
     const levelOutOf100 = (level / pressureRange) * 100;
-    // 20(dark) - 90(light)
-    return 100 - Math.floor(levelOutOf100 * (70 / 100));
+    // 30(dark) - 90(light)
+    return 100 - Math.floor(levelOutOf100 * (60 / 100));
   };
 
   const renderLegend = () => {
@@ -93,10 +97,34 @@ const App = () => {
           defaultValue={3}
           onChange={setPressureRange}
         />
-        <Palette
-          selectedColor={selectedColor}
-          setSelectedColor={setSelectedColor}
-        />
+        <div style={{ margin: '15px 0 5px 0' }}>
+          <Radio.Group
+            onChange={e => setInputMode(e.target.value)}
+            value={inputMode}
+          >
+            {mode.map(mode => {
+              return <Radio value={mode}>{mode}</Radio>;
+            })}
+          </Radio.Group>
+        </div>
+
+        {inputMode === mode[0] ? (
+          <Palette
+            selectedColor={selectedColor}
+            setSelectedColor={setSelectedColor}
+          />
+        ) : (
+          <div style={{ margin: '15px 0 5px 0', width: 110, display: 'flex' }}>
+            <Input onChange={e => setHex(e.target.value)} value={hex} />
+            <span
+              style={{
+                display: 'inline-block',
+                width: 50,
+                backgroundColor: hex
+              }}
+            />
+          </div>
+        )}
       </Col>
       <Col span={9}>
         <h2>Sample</h2>
