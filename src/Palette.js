@@ -9,6 +9,16 @@ const Palette = props => {
   const colors = filtered
     ? colorNames.filter(color => usedColors.includes(color))
     : colorNames;
+
+  const selectColorWithKey = e => {
+    const index = colors.indexOf(props.selectedColor);
+    if (e.keyCode === 39 && index !== colors.length - 1) {
+      props.setSelectedColor(colors[index + 1]);
+    } else if (e.keyCode === 37 && !(index < 1)) {
+      props.setSelectedColor(colors[index - 1]);
+    }
+  };
+
   return (
     <>
       <div style={{ margin: '15px 0 5px 0' }}>
@@ -16,12 +26,15 @@ const Palette = props => {
       </div>
       <Checkbox checked={filtered} onChange={() => setFiltered(!filtered)} />{' '}
       used colors
-      <ul style={{ width: 200, margin: 0, padding: 0 }}>
-        {colors.map(color => {
+      <ul className="palette" style={{ width: 200, margin: 0, padding: 0 }}>
+        {colors.map((color, index) => {
           return (
             <li
+              tabindex={++index}
               key={color}
               onClick={() => props.setSelectedColor(color)}
+              onFocus={() => props.setSelectedColor(color)}
+              onKeyDown={e => selectColorWithKey(e)}
               style={{
                 width: 18,
                 height: 18,
