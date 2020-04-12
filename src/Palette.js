@@ -30,7 +30,7 @@ const Palette = props => {
         {colors.map((color, index) => {
           return (
             <li
-              tabindex={++index}
+              tabIndex={++index}
               key={color}
               onClick={() => props.setSelectedColor(color)}
               onFocus={() => props.setSelectedColor(color)}

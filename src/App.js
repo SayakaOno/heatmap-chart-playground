@@ -103,7 +103,11 @@ const App = () => {
             value={inputMode}
           >
             {mode.map(mode => {
-              return <Radio value={mode}>{mode}</Radio>;
+              return (
+                <Radio key={mode} value={mode}>
+                  {mode}
+                </Radio>
+              );
             })}
           </Radio.Group>
         </div>
