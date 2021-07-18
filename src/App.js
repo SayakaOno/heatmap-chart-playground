@@ -88,7 +88,7 @@ const App = () => {
       });
   };
 
-  if (window.location.pathname === '/css-colors/gradation') {
+  if ('temporary') {
     return <CustomGradation />;
   }
 
