@@ -3,6 +3,7 @@ import { Row, Col, InputNumber, Switch, Button, Radio, Input } from 'antd';
 import 'antd/dist/antd.css';
 import html2canvas from 'html2canvas';
 import Palette from './Palette';
+import CustomGradation from './CustomGradation';
 import './App.css';
 import w3color, { usedColors, hexs } from './w3color';
 
@@ -86,6 +87,10 @@ const App = () => {
         setHistory(newRecord);
       });
   };
+
+  if (window.location.pathname === '/css-colors/gradation') {
+    return <CustomGradation />;
+  }
 
   return (
     <Row style={{ padding: 20, height: 'calc(100vh - 40px)' }}>
