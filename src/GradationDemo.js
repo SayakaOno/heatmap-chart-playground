@@ -1,5 +1,5 @@
 import React from 'react';
-import { values3 as values } from './gradationGridData';
+import { left, right } from './gradationGridData';
 import './gradation.css';
 
 const GradationDemo = props => {
@@ -71,8 +71,8 @@ const GradationDemo = props => {
     );
   };
 
-  const renderGrid = () => {
-    return values.map(array => {
+  const renderGrid = data => {
+    return data.map(array => {
       return array.map(value => {
         return (
           <div
@@ -118,7 +118,10 @@ const GradationDemo = props => {
     <div className="gradation-demo">
       <div className="gradation-demo__bar">{renderGradation()}</div>
       <div className="gradation-demo__body">
-        <div className="gradation-demo__body__left">{renderGrid()}</div>
+        <div className="gradation-demo__body__left">
+          <div className="grid">{renderGrid(left)}</div>
+          <div className="grid">{renderGrid(right)}</div>
+        </div>
         <div className="gradation-demo__body__right">
           {colors.map((color, index) => {
             return (

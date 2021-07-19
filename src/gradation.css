@@ -1,6 +1,6 @@
 .gradation {
   margin: 30px;
-  width: 500px;
+  width: 1200px;
   margin-bottom: 100px;
 }
 
@@ -9,6 +9,7 @@
 }
 
 .gradation-demo__bar {
+  width: 500px;
   margin-bottom: 30px;
 }
 
@@ -19,9 +20,14 @@
 
 .gradation-demo__body__left {
   display: flex;
-  flex-wrap: wrap;
-  width: 238px;
   margin-right: 30px;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  width: 280px;
+  margin-right: 10px;
 }
 
 .gradation-demo__body__right__item {
