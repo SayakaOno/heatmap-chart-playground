@@ -4,9 +4,11 @@ import { Checkbox } from 'antd';
 import './App.css';
 import { colorNames, usedColors } from './w3color';
 
+const disableUsedColor = true;
+
 const Palette = props => {
   const [filtered, setFiltered] = useState(true);
-  const colors = filtered
+  const colors = !disableUsedColor && filtered
     ? colorNames.filter(color => usedColors.includes(color))
     : colorNames;
 
@@ -24,8 +26,12 @@ const Palette = props => {
       <div style={{ margin: '15px 0 5px 0' }}>
         Color: <b>{props.selectedColor}</b>
       </div>
-      <Checkbox checked={filtered} onChange={() => setFiltered(!filtered)} />{' '}
-      used colors
+      {!disableUsedColor &&
+        <div>
+          <Checkbox checked={filtered} onChange={() => setFiltered(!filtered)} />
+          <span>used colors</span>
+        </div>
+      }
       <ul className="palette" style={{ width: 200, margin: 0, padding: 0 }}>
         {colors.map((color, index) => {
           return (
