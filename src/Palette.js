@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import 'antd/dist/antd.css';
-import { Checkbox } from 'antd';
+import { Checkbox, Tooltip } from 'antd';
 import './App.css';
 import { colorNames, usedColors } from './w3color';
 
@@ -35,24 +35,26 @@ const Palette = props => {
       <ul className="palette" style={{ width: 200, margin: 0, padding: 0 }}>
         {colors.map((color, index) => {
           return (
-            <li
-              tabIndex={++index}
-              key={color}
-              onClick={() => props.setSelectedColor(color)}
-              onFocus={() => props.setSelectedColor(color)}
-              onKeyDown={e => selectColorWithKey(e)}
-              style={{
-                width: 18,
-                height: 18,
-                background: color,
-                border: `solid 1px ${
-                  props.selectedColor === color ? '#000' : color
-                }`,
-                listStyle: 'none',
-                display: 'inline-block',
-                cursor: 'pointer'
-              }}
-            ></li>
+            <Tooltip title={color}>
+              <li
+                tabIndex={++index}
+                key={color}
+                onClick={() => props.setSelectedColor(color)}
+                onFocus={() => props.setSelectedColor(color)}
+                onKeyDown={e => selectColorWithKey(e)}
+                style={{
+                  width: 18,
+                  height: 18,
+                  background: color,
+                  border: `solid 1px ${
+                    props.selectedColor === color ? '#000' : color
+                  }`,
+                  listStyle: 'none',
+                  display: 'inline-block',
+                  cursor: 'pointer'
+                }}
+              />
+            </Tooltip>
           );
         })}
       </ul>
