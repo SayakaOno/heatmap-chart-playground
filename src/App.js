@@ -5,13 +5,13 @@ import html2canvas from 'html2canvas';
 import Palette from './Palette';
 import CustomGradation from './CustomGradation';
 import './App.css';
-import w3color, { usedColors, hexs } from './w3color';
+import w3color, { hexs, colorNames } from './w3color';
 
 const mode = ['Color name', 'Hex'];
 
 const App = () => {
 	const [pressureRange, setPressureRange] = useState(3);
-	const [selectedColor, setSelectedColor] = useState(usedColors[0]);
+	const [selectedColor, setSelectedColor] = useState(colorNames[0]);
 	const [showNumber, setShowNumber] = useState(false);
 	const [pressures, setPressures] = useState([]);
 	const [history, setHistory] = useState([]);
@@ -89,6 +89,11 @@ const App = () => {
 			});
 	};
 
+	const onSetSelectedColor = (colorName, index) => {
+		setSelectedColor(colorName);
+		setHex('#' + hexs[index]);
+	};
+
 	const renderBody = () => {
 		if (version === 2) {
 			return <CustomGradation />;
@@ -112,7 +117,7 @@ const App = () => {
 					</div>
 
 					{inputMode === mode[0] ? (
-						<Palette selectedColor={selectedColor} setSelectedColor={setSelectedColor} />
+						<Palette selectedColor={selectedColor} setSelectedColor={onSetSelectedColor} />
 					) : (
 						<div style={{ margin: '15px 0 5px 0', width: 110, display: 'flex' }}>
 							<Input onChange={(e) => setHex(e.target.value)} value={hex} />

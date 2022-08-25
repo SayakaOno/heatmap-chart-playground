@@ -37,10 +37,10 @@ const Palette = props => {
           return (
             <Tooltip title={color}>
               <li
-                tabIndex={++index}
+                tabIndex={index + 1}
                 key={color}
-                onClick={() => props.setSelectedColor(color)}
-                onFocus={() => props.setSelectedColor(color)}
+                onClick={() => props.setSelectedColor(color, index)}
+                onFocus={() => props.setSelectedColor(color, index)}
                 onKeyDown={e => selectColorWithKey(e)}
                 style={{
                   width: 18,
