@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import GradationDemo from './GradationDemo';
 import { initialColors } from '../gradationGridData';
 import { getHeatMapColor } from '../utils';
 import './gradation.css';
@@ -20,41 +19,6 @@ const CustomGradationGenerator = (props) => {
 		},
 		[number, colors]
 	);
-
-	const renderGradation = () => {
-		const values = [];
-		for (let i = 0; i < 100; i++) {
-			values.push(i * 0.01);
-		}
-		const gradation = values.map((value) => {
-			return (
-				<div
-					style={{
-						backgroundColor: getHeatMapColor(number, colors, value),
-						color: '#fff',
-						content: '',
-						width: 5,
-						height: 30
-					}}
-				/>
-			);
-		});
-
-		let labels = [];
-		for (let i = 0; i < number; i++) {
-			labels.push(i);
-		}
-		labels = labels.map((label) => {
-			return <span>{label}</span>;
-		});
-
-		return (
-			<div>
-				<div style={{ display: 'flex' }}>{gradation}</div>
-				<div style={{ display: 'flex', justifyContent: 'space-between' }}>{labels}</div>
-			</div>
-		);
-	};
 
 	const onChangeColor = (e, index) => {
 		const newColors = colors.slice();
@@ -82,7 +46,6 @@ const CustomGradationGenerator = (props) => {
 
 	return (
 		<div className="gradation-demo">
-			<div className="gradation-demo__bar">{renderGradation()}</div>
 			<div className="gradation-demo__body">
 				<div className="gradation-demo__body__right">
 					{colors.map((color, index) => {

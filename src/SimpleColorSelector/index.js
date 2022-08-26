@@ -1,15 +1,16 @@
-import React from 'react';
-import { InputNumber, Radio, Input } from 'antd';
+import React, { useState } from 'react';
+import { InputNumber, Radio, Input, Checkbox } from 'antd';
 import Palette from './Palette';
 import 'antd/dist/antd.css';
 
 const SimpleColorSelector = (props) => {
-	const { setPressureRange, setInputMode, inputMode, mode, selectedColor, onSetSelectedColor, setHex, hex } = props;
+
+	const { setPressureRange, setInputMode, inputMode, mode, selectedColor, onSetSelectedColor, setHex, hex,rangeEnabled, setRangeEnabled } = props;
 
 	return (
 		<>
-			<div>Range:</div>
-			<InputNumber min={3} max={10} defaultValue={3} onChange={setPressureRange} />
+			<div><Checkbox checked={rangeEnabled} onChange={(e) => setRangeEnabled(e.target.checked)}/> Range:</div>
+			<InputNumber min={3} max={10} defaultValue={3} onChange={setPressureRange} disabled={!rangeEnabled}/>
 			<div style={{ margin: '15px 0 5px 0' }}>
 				<Radio.Group onChange={(e) => setInputMode(e.target.value)} value={inputMode}>
 					{mode.map((mode) => {

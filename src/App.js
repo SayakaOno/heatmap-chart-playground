@@ -32,33 +32,14 @@ const App = () => {
 	const [hex, setHex] = useState('#' + hexs[0]);
 	const [version, setVersion] = useState(1);
 	const [getColor, setGetColor] = useState(null);
+	const [rangeEnabled, setRangeEnabled] = useState(false);
 
 	const w3colorObj = w3color()(inputMode === mode[0] ? selectedColor : hex);
 	const hsl = w3colorObj.toHsl();
 
-	useEffect(
-		() => {
-			setPressures(generatePressures());
-		},
-		[pressureRange]
-	);
-
-	useEffect(
-		() => {
-			if (version === 1) {
-				const func = (pressure) => {
-					return `hsl(${hsl.h}, ${hsl.s * 100}%, ${getLightness(getMappedPercentage(pressure))}%)`;
-				};
-				setGetColor(() => func);
-			}
-		},
-		[version, hex]
-	);
-
-	const getLightness = (level) => {
-		// 30(dark) - 90(light)
-		return 100 - Math.floor(level * (60 / 100));
-	};
+	useEffect(() => {
+		setPressures(generatePressures());
+	}, []);
 
 	const colorSteps = useMemo(
 		() => {
@@ -70,6 +51,24 @@ const App = () => {
 		},
 		[pressureRange]
 	);
+
+	useEffect(
+		() => {
+			if (version === 1) {
+				const func = (percentage, shouldMap) => {
+					const usedPercentage = shouldMap ? getMappedPercentage(percentage) : percentage;
+					return `hsl(${hsl.h}, ${hsl.s * 100}%, ${getLightness(usedPercentage)}%)`;
+				};
+				setGetColor(() => func);
+			}
+		},
+		[version, hex, colorSteps]
+	);
+
+	const getLightness = (level) => {
+		// 30(dark) - 90(light)
+		return 100 - Math.floor(level * (60 / 100));
+	};
 
 	const getMappedPercentage = (percentage) => {
 		if ([0, 100].includes(percentage)) {
@@ -84,35 +83,64 @@ const App = () => {
 		return colorSteps[0];
 	};
 
-	const renderLegend = () => {
-		let elems = [];
-		for (let i = pressureRange; i > 0; i--) {
-			elems.push(
-				<div key={i}>
-					<span
-						style={{
-							display: 'inline-block',
-							width: 20,
-							textAlign: 'right',
-							marginRight: 3
-						}}
-					>
-						{i}
-					</span>
-					<span
-						style={{
-							display: 'inline-block',
-							width: 18,
-							height: 18,
-							border: 'solid 1px #111',
-							background: getColor && getColor(100 * (i / pressureRange))
-						}}
-					/>
-				</div>
-			);
-		}
-		return elems;
-	};
+	const legend = useMemo(
+		() => {
+			if (version === 1 && rangeEnabled) {
+				let elems = [];
+				for (let i = pressureRange; i > 0; i--) {
+					elems.push(
+						<div key={i}>
+							<span
+								style={{
+									display: 'inline-block',
+									width: 20,
+									textAlign: 'right',
+									marginRight: 3
+								}}
+							>
+								{i}
+							</span>
+							<span
+								style={{
+									display: 'inline-block',
+									width: 18,
+									height: 18,
+									border: 'solid 1px #111',
+									background: getColor && getColor(100 * (i / pressureRange))
+								}}
+							/>
+						</div>
+					);
+				}
+				return elems;
+			} else {
+				const values = [];
+				for (let i = 1; i <= 100; i++) {
+					values.push(100 - i);
+				}
+
+				return (
+					<div style={{ float: 'right' }}>
+						{values.map((value, index) => {
+							return (
+								<div
+									key={index}
+									style={{
+										backgroundColor: getColor && getColor(value),
+										color: '#fff',
+										content: '',
+										width: 18,
+										height: 240 / values.length
+									}}
+								/>
+							);
+						})}
+					</div>
+				);
+			}
+		},
+		[version, rangeEnabled, getColor, pressureRange]
+	);
 
 	const shot = async () => {
 		html2canvas(document.querySelector('#capture'))
@@ -149,6 +177,8 @@ const App = () => {
 							onSetSelectedColor={onSetSelectedColor}
 							setHex={setHex}
 							hex={hex}
+							rangeEnabled={rangeEnabled}
+							setRangeEnabled={setRangeEnabled}
 						/>
 					) : (
 						<CustomGradationGenerator setGetColor={setGetColor} />
@@ -157,7 +187,7 @@ const App = () => {
 				<Col span={9}>
 					<h2>Sample</h2>
 					<div id="capture" style={{ display: 'flex' }}>
-						<div style={{ marginRight: 10, width: 41 }}>{renderLegend()}</div>
+						<div style={{ marginRight: 10, width: 41 }}>{legend}</div>
 						<div
 							style={{
 								width: 401,
@@ -177,7 +207,7 @@ const App = () => {
 											float: 'left',
 											borderRight: 'solid 1px lightblue',
 											borderBottom: 'solid 1px lightblue',
-											background: getColor(pressure)
+											background: getColor(pressure, rangeEnabled)
 										}}
 									>
 										{showNumber && pressure}
