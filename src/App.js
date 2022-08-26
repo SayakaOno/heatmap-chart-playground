@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Row, Col, Switch, Button, Radio } from 'antd';
+import { Row, Col, Switch, Button, Radio, Tooltip } from 'antd';
+import { InfoCircleOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
 import html2canvas from 'html2canvas';
 import SimpleColorSelector from './SimpleColorSelector';
 import CustomGradationGenerator from './CustomGradationGenerator';
 import w3color, { hexs, colorNames } from './w3color';
+import { initialColors } from './gradationGridData';
 import './App.css';
 
 const mode = ['Color name', 'Hex'];
@@ -32,6 +34,7 @@ const App = () => {
 	const [version, setVersion] = useState(1);
 	const [getColor, setGetColor] = useState(null);
 	const [rangeEnabled, setRangeEnabled] = useState(false);
+	const [customGradationColors, setCustomGradationColors] = useState(initialColors);
 
 	const w3colorObj = w3color()(inputMode === mode[0] ? selectedColor : hex);
 	const hsl = w3colorObj.toHsl();
@@ -141,14 +144,36 @@ const App = () => {
 		[version, rangeEnabled, getColor, pressureRange]
 	);
 
-	const shot = async () => {
+	const capture = async () => {
 		html2canvas(document.querySelector('#capture'))
 			.then((canvas) => {
 				const imgData = canvas.toDataURL();
 				return imgData;
 			})
 			.then((imgData) => {
-				const newRecord = [...history, [`${selectedColor}-${pressureRange}`, imgData]];
+				let colorInfo = 'Color: ';
+				if (version === 1) {
+					if (inputMode === mode[0]) {
+						colorInfo += selectedColor;
+					} else {
+						colorInfo += hex;
+					}
+
+					if (rangeEnabled) {
+						colorInfo += `, Range: ${pressureRange}`;
+					}
+				} else {
+					const rgbs = customGradationColors.slice().reverse().map(([r,g,b], index) => {
+						return <div key={index}>[{r}, {g}, {b}]</div>
+					});
+					colorInfo = <>
+							<span>Color </span>
+							<Tooltip title={rgbs}>
+								<InfoCircleOutlined />
+							</Tooltip>
+						</>
+				}
+				const newRecord = [...history, [colorInfo, imgData]];
 				setHistory(newRecord);
 			});
 	};
@@ -176,7 +201,11 @@ const App = () => {
 							setRangeEnabled={setRangeEnabled}
 						/>
 					) : (
-						<CustomGradationGenerator setGetColor={setGetColor} />
+						<CustomGradationGenerator
+							setGetColor={setGetColor}
+							colors={customGradationColors}
+							setColors={setCustomGradationColors}
+						/>
 					)}
 				</Col>
 				<Col span={9}>
@@ -219,8 +248,8 @@ const App = () => {
 						/>
 						<span>Show numbers</span>
 					</div>
-					<Button onClick={shot} style={{ marginLeft: 350 }}>
-						Screenshot
+					<Button onClick={capture} style={{ marginLeft: 350 }}>
+						Capture
 					</Button>
 				</Col>
 				<Col span={10} style={{ height: 'calc(100vh - 40px)', overflow: 'scroll' }}>
@@ -229,12 +258,9 @@ const App = () => {
 							<h2>History</h2>
 							<div>
 								{history.map((item, index) => {
-									let attribute = item[0].split('-');
 									return (
 										<div key={index} style={{ float: 'left', width: '50%' }}>
-											<div>
-												Color: {attribute[0]}, Range: {attribute[1]}
-											</div>
+											<div>{item[0]}</div>
 											<img src={item[1]} style={{ width: '100%' }} />
 										</div>
 									);

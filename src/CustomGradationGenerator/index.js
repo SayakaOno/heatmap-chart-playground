@@ -5,7 +5,7 @@ import { getHeatMapColor } from '../utils';
 import './gradation.css';
 
 const CustomGradationGenerator = (props) => {
-	const [colors, setColors] = useState(initialColors);
+	const { colors, setColors } = props;
 	const [gradientPointCount, setGradientPointCount] = useState(colors.length);
 
 	const { setGetColor } = props;
@@ -66,7 +66,7 @@ const CustomGradationGenerator = (props) => {
 	const colorInputs = useMemo(
 		() => {
 			const inputs = [];
-			for (let i = 0; i < gradientPointCount; i++) {
+			for (let i = gradientPointCount - 1; i >= 0; i--) {
 				inputs.push(
 					<div key={i} style={{ display: 'flex', marginBottom: 5 }}>
 						<div
@@ -93,17 +93,23 @@ const CustomGradationGenerator = (props) => {
 		[gradientPointCount, onChangeColor]
 	);
 
+	const onChangeInput = (input) => {
+		if (input) {
+			setGradientPointCount(input);
+		}
+	};
+
 	return (
 		<div className="gradation-demo">
 			<div className="gradation-demo__body">
 				<div className="gradation-demo__body__right">
 					<div>Gradient points:</div>
 					<InputNumber
-						min={3}
+						min={2}
 						max={10}
 						value={gradientPointCount}
 						defaultValue={gradientPointCount}
-						onChange={setGradientPointCount}
+						onChange={onChangeInput}
 						style={{ marginBottom: 15 }}
 					/>
 					{colorInputs}
