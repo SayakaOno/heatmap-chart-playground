@@ -35,7 +35,7 @@ const Palette = props => {
       <ul className="palette" style={{ width: 200, margin: 0, padding: 0 }}>
         {colors.map((color, index) => {
           return (
-            <Tooltip title={color}>
+            <Tooltip title={color} key={color}>
               <li
                 tabIndex={index + 1}
                 key={color}

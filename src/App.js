@@ -30,7 +30,7 @@ const App = () => {
 	);
 
 	const randomNumber = () => {
-		return Math.floor(Math.random() * (pressureRange + 1));
+		return Math.floor(Math.random() * 101);
 	};
 
 	const generatePressures = () => {
@@ -42,9 +42,32 @@ const App = () => {
 	};
 
 	const getLightness = (level) => {
-		const levelOutOf100 = level / pressureRange * 100;
 		// 30(dark) - 90(light)
-		return 100 - Math.floor(levelOutOf100 * (60 / 100));
+		return 100 - Math.floor(level * (60 / 100));
+	};
+
+	const colorSteps = useMemo(
+		() => {
+			const steps = [];
+			for (let i = 1; i <= pressureRange; i++) {
+				steps.push(100 * (i / pressureRange));
+			}
+			return steps;
+		},
+		[pressureRange]
+	);
+
+	const getMappedPercentage = (percentage) => {
+		if ([0, 100].includes(percentage)) {
+			return percentage;
+		}
+		for (let i = colorSteps.length - 2; i >= 0; i--) {
+			const step = colorSteps[i];
+			if (step < percentage) {
+				return colorSteps[i + 1];
+			}
+		}
+		return colorSteps[0];
 	};
 
 	const renderLegend = () => {
@@ -68,7 +91,7 @@ const App = () => {
 							width: 18,
 							height: 18,
 							border: 'solid 1px #111',
-							background: `hsl(${hsl.h}, ${hsl.s * 100}%, ${getLightness(i)}%)`
+							background: `hsl(${hsl.h}, ${hsl.s * 100}%, ${getLightness(100 * (i / pressureRange))}%)`
 						}}
 					/>
 				</div>
@@ -154,7 +177,9 @@ const App = () => {
 											float: 'left',
 											borderRight: 'solid 1px lightblue',
 											borderBottom: 'solid 1px lightblue',
-											background: `hsl(${hsl.h}, ${hsl.s * 100}%, ${getLightness(pressure)}%)`
+											background: `hsl(${hsl.h}, ${hsl.s * 100}%, ${getLightness(
+												getMappedPercentage(pressure)
+											)}%)`
 										}}
 									>
 										{showNumber && pressure}
