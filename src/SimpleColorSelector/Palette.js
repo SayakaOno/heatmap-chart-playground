@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import 'antd/dist/antd.css';
 import { Checkbox, Tooltip } from 'antd';
-import './App.css';
-import { colorNames, usedColors } from './w3color';
+import '../App.css';
+import { colorNames, usedColors } from './../w3color';
 
 const disableUsedColor = true;
 

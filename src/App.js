@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Row, Col, InputNumber, Switch, Button, Radio, Input } from 'antd';
+import { Row, Col, Switch, Button, Radio } from 'antd';
 import 'antd/dist/antd.css';
 import html2canvas from 'html2canvas';
-import Palette from './Palette';
-import CustomGradation from './CustomGradation';
-import './App.css';
+import SimpleColorSelector from './SimpleColorSelector';
+import CustomGradationGenerator from './CustomGradationGenerator';
+import CustomGradation from './CustomGradationGenerator/CustomGradation';
 import w3color, { hexs, colorNames } from './w3color';
+import './App.css';
 
 const mode = ['Color name', 'Hex'];
 
@@ -125,33 +126,19 @@ const App = () => {
 		return (
 			<Row style={{ padding: 20, height: 'calc(100vh - 40px)' }}>
 				<Col span={5}>
-					<div>Range:</div>
-					<InputNumber min={3} max={10} defaultValue={3} onChange={setPressureRange} />
-					<div style={{ margin: '15px 0 5px 0' }}>
-						<Radio.Group onChange={(e) => setInputMode(e.target.value)} value={inputMode}>
-							{mode.map((mode) => {
-								return (
-									<Radio key={mode} value={mode}>
-										{mode}
-									</Radio>
-								);
-							})}
-						</Radio.Group>
-					</div>
-
-					{inputMode === mode[0] ? (
-						<Palette selectedColor={selectedColor} setSelectedColor={onSetSelectedColor} />
+					{version === 1 ? (
+						<SimpleColorSelector
+							setPressureRange={setPressureRange}
+							setInputMode={setInputMode}
+							inputMode={inputMode}
+							mode={mode}
+							selectedColor={selectedColor}
+							onSetSelectedColor={onSetSelectedColor}
+							setHex={setHex}
+							hex={hex}
+						/>
 					) : (
-						<div style={{ margin: '15px 0 5px 0', width: 110, display: 'flex' }}>
-							<Input onChange={(e) => setHex(e.target.value)} value={hex} />
-							<span
-								style={{
-									display: 'inline-block',
-									width: 50,
-									backgroundColor: hex
-								}}
-							/>
-						</div>
+						<CustomGradationGenerator />
 					)}
 				</Col>
 				<Col span={9}>
