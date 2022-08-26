@@ -9,6 +9,18 @@ import w3color, { hexs, colorNames } from './w3color';
 
 const mode = ['Color name', 'Hex'];
 
+export const getRandomNumber = () => {
+	return Math.floor(Math.random() * 101);
+};
+
+export const generatePressures = () => {
+	let pressures = [];
+	for (let i = 0; i < 240; i++) {
+		pressures.push(getRandomNumber());
+	}
+	return pressures;
+};
+
 const App = () => {
 	const [pressureRange, setPressureRange] = useState(3);
 	const [selectedColor, setSelectedColor] = useState(colorNames[0]);
@@ -28,18 +40,6 @@ const App = () => {
 		},
 		[pressureRange]
 	);
-
-	const randomNumber = () => {
-		return Math.floor(Math.random() * 101);
-	};
-
-	const generatePressures = () => {
-		let pressures = [];
-		for (let i = 0; i < 240; i++) {
-			pressures.push(randomNumber());
-		}
-		return pressures;
-	};
 
 	const getLightness = (level) => {
 		// 30(dark) - 90(light)
