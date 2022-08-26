@@ -1,23 +1,40 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { InputNumber, Button } from 'antd';
 import { initialColors } from '../gradationGridData';
 import { getHeatMapColor } from '../utils';
 import './gradation.css';
 
 const CustomGradationGenerator = (props) => {
 	const [colors, setColors] = useState(initialColors);
-	const [number, setNumber] = useState(9);
-	const [count, setCount] = useState(0);
+	const [gradientPointCount, setGradientPointCount] = useState(colors.length);
 
-	const { onDelete, setGetColor } = props;
+	const { setGetColor } = props;
+
+	useEffect(
+		() => {
+			const newColors = [...colors];
+			if (colors.length > gradientPointCount) {
+				newColors.length = gradientPointCount;
+			} else if (colors.length < gradientPointCount) {
+				for (let i = 0; i < gradientPointCount - colors.length; i++) {
+					newColors.push(colors[colors.length - 1]);
+				}
+			}
+			setColors(newColors);
+		},
+		[gradientPointCount]
+	);
 
 	useEffect(
 		() => {
 			const func = (value) => {
-				return getHeatMapColor(number, colors, value / 100);
+				if (gradientPointCount === colors.length) {
+					return getHeatMapColor(gradientPointCount, colors, value / 100);
+				}
 			};
 			setGetColor(() => func);
 		},
-		[number, colors]
+		[gradientPointCount, colors]
 	);
 
 	const onChangeColor = (e, index) => {
@@ -28,8 +45,10 @@ const CustomGradationGenerator = (props) => {
 	};
 
 	const renderButton = () => {
-		const text = initialColors ? 'Reset' : 'Delete';
-		const onClick = initialColors ? () => setColors(initialColors) : onDelete;
+		const onClick = () => {
+			setGradientPointCount(initialColors.length);
+			setColors(initialColors);
+		};
 
 		return (
 			<div
@@ -39,37 +58,55 @@ const CustomGradationGenerator = (props) => {
 					marginRight: 15
 				}}
 			>
-				<button onClick={onClick}>{text}</button>
+				<Button onClick={onClick}>Reset</Button>
 			</div>
 		);
 	};
+
+	const colorInputs = useMemo(
+		() => {
+			const inputs = [];
+			for (let i = 0; i < gradientPointCount; i++) {
+				inputs.push(
+					<div key={i} style={{ display: 'flex', marginBottom: 5 }}>
+						<div
+							className="gradation-demo__body__right__item"
+							style={{
+								backgroundColor: `rgb(${colors[i]})`
+							}}
+						>
+							{i}
+						</div>
+						<span>rgb(</span>
+						<input
+							value={colors[i]}
+							onChange={(e) => onChangeColor(e, i)}
+							type="text"
+							style={{ border: 'none', background: '#f1f1f1' }}
+						/>
+						<span>)</span>
+					</div>
+				);
+			}
+			return inputs;
+		},
+		[gradientPointCount, onChangeColor]
+	);
 
 	return (
 		<div className="gradation-demo">
 			<div className="gradation-demo__body">
 				<div className="gradation-demo__body__right">
-					{colors.map((color, index) => {
-						return (
-							<div key={index} style={{ display: 'flex', marginBottom: 5 }}>
-								<div
-									className="gradation-demo__body__right__item"
-									style={{
-										backgroundColor: `rgb(${color})`
-									}}
-								>
-									{index}
-								</div>
-								<span>rgb(</span>
-								<input
-									value={colors[index]}
-									onChange={(e) => onChangeColor(e, index)}
-									type="text"
-									style={{ border: 'none', background: '#f1f1f1' }}
-								/>
-								<span>)</span>
-							</div>
-						);
-					})}
+					<div>Gradient points:</div>
+					<InputNumber
+						min={3}
+						max={10}
+						value={gradientPointCount}
+						defaultValue={gradientPointCount}
+						onChange={setGradientPointCount}
+						style={{ marginBottom: 15 }}
+					/>
+					{colorInputs}
 				</div>
 			</div>
 			{renderButton()}
