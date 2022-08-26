@@ -31,6 +31,7 @@ const App = () => {
 	const [inputMode, setInputMode] = useState(mode[0]);
 	const [hex, setHex] = useState('#' + hexs[0]);
 	const [version, setVersion] = useState(1);
+	const [getColor, setGetColor] = useState(null);
 
 	const w3colorObj = w3color()(inputMode === mode[0] ? selectedColor : hex);
 	const hsl = w3colorObj.toHsl();
@@ -40,6 +41,18 @@ const App = () => {
 			setPressures(generatePressures());
 		},
 		[pressureRange]
+	);
+
+	useEffect(
+		() => {
+			if (version === 1) {
+				const func = (pressure) => {
+					return `hsl(${hsl.h}, ${hsl.s * 100}%, ${getLightness(getMappedPercentage(pressure))}%)`;
+				};
+				setGetColor(() => func);
+			}
+		},
+		[version, hex]
 	);
 
 	const getLightness = (level) => {
@@ -92,7 +105,7 @@ const App = () => {
 							width: 18,
 							height: 18,
 							border: 'solid 1px #111',
-							background: `hsl(${hsl.h}, ${hsl.s * 100}%, ${getLightness(100 * (i / pressureRange))}%)`
+							background: getColor && getColor(100 * (i / pressureRange))
 						}}
 					/>
 				</div>
@@ -119,9 +132,9 @@ const App = () => {
 	};
 
 	const renderBody = () => {
-		if (version === 2) {
-			return <CustomGradation />;
-		}
+		// if (version === 2) {
+		// 	return <CustomGradation />;
+		// }
 
 		return (
 			<Row style={{ padding: 20, height: 'calc(100vh - 40px)' }}>
@@ -138,7 +151,7 @@ const App = () => {
 							hex={hex}
 						/>
 					) : (
-						<CustomGradationGenerator />
+						<CustomGradationGenerator setGetColor={setGetColor} />
 					)}
 				</Col>
 				<Col span={9}>
@@ -164,9 +177,7 @@ const App = () => {
 											float: 'left',
 											borderRight: 'solid 1px lightblue',
 											borderBottom: 'solid 1px lightblue',
-											background: `hsl(${hsl.h}, ${hsl.s * 100}%, ${getLightness(
-												getMappedPercentage(pressure)
-											)}%)`
+											background: getColor(pressure)
 										}}
 									>
 										{showNumber && pressure}

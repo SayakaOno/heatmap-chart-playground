@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import GradationDemo from './GradationDemo';
 import { initialColors } from '../gradationGridData';
+import { getHeatMapColor } from '../utils';
 import './gradation.css';
 
 const CustomGradationGenerator = (props) => {
@@ -8,33 +9,17 @@ const CustomGradationGenerator = (props) => {
 	const [number, setNumber] = useState(9);
 	const [count, setCount] = useState(0);
 
-	const { onDelete } = props;
+	const { onDelete, setGetColor } = props;
 
-	const getHeatMapColor = (value) => {
-		// https://www.andrewnoske.com/wiki/Code_-_heatmaps_and_color_gradients
-		let idx1 = null; // |-- Our desired color will be between these two indexes in "color".
-		let idx2 = null; // |
-		let fractBetween = 0; // Fraction between "idx1" and "idx2" where our value is.
-
-		if (value <= 0) {
-			idx1 = idx2 = 0;
-		} else if (value >= 1) {
-			// accounts for an input <=0
-			idx1 = idx2 = number - 1;
-		} else {
-			// accounts for an input >=0
-			value = value * (number - 1); // Will multiply value by 3.
-			idx1 = Math.floor(value); // Our desired color will be after this index.
-			idx2 = idx1 + 1; // ... and before this index (inclusive).
-			fractBetween = value - +idx1.toFixed(2); // Distance between the two indexes (0-1).
-		}
-
-		const r = (colors[idx2][0] - colors[idx1][0]) * fractBetween + colors[idx1][0];
-		const g = (colors[idx2][1] - colors[idx1][1]) * fractBetween + colors[idx1][1];
-		const b = (colors[idx2][2] - colors[idx1][2]) * fractBetween + colors[idx1][2];
-
-		return `rgb(${Math.floor(r)}, ${Math.floor(g)}, ${Math.floor(b)})`;
-	};
+	useEffect(
+		() => {
+			const func = (value) => {
+				return getHeatMapColor(number, colors, value / 100);
+			};
+			setGetColor(() => func);
+		},
+		[number, colors]
+	);
 
 	const renderGradation = () => {
 		const values = [];
@@ -45,7 +30,7 @@ const CustomGradationGenerator = (props) => {
 			return (
 				<div
 					style={{
-						backgroundColor: getHeatMapColor(value),
+						backgroundColor: getHeatMapColor(number, colors, value),
 						color: '#fff',
 						content: '',
 						width: 5,
