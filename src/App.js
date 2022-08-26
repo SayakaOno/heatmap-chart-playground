@@ -4,17 +4,16 @@ import 'antd/dist/antd.css';
 import html2canvas from 'html2canvas';
 import SimpleColorSelector from './SimpleColorSelector';
 import CustomGradationGenerator from './CustomGradationGenerator';
-import CustomGradation from './CustomGradationGenerator/CustomGradation';
 import w3color, { hexs, colorNames } from './w3color';
 import './App.css';
 
 const mode = ['Color name', 'Hex'];
 
-export const getRandomNumber = () => {
+const getRandomNumber = () => {
 	return Math.floor(Math.random() * 101);
 };
 
-export const generatePressures = () => {
+const generatePressures = () => {
 	let pressures = [];
 	for (let i = 0; i < 240; i++) {
 		pressures.push(getRandomNumber());
@@ -160,10 +159,6 @@ const App = () => {
 	};
 
 	const renderBody = () => {
-		// if (version === 2) {
-		// 	return <CustomGradation />;
-		// }
-
 		return (
 			<Row style={{ padding: 20, height: 'calc(100vh - 40px)' }}>
 				<Col span={5}>

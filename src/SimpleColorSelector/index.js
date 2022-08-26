@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { InputNumber, Radio, Input, Checkbox } from 'antd';
 import Palette from './Palette';
 import 'antd/dist/antd.css';
