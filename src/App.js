@@ -15,19 +15,19 @@ const getRandomNumber = () => {
 	return Math.floor(Math.random() * 101);
 };
 
-const generatePressures = () => {
-	let pressures = [];
+const generateHeatmapData = () => {
+	let data = [];
 	for (let i = 0; i < 240; i++) {
-		pressures.push(getRandomNumber());
+		data.push(getRandomNumber());
 	}
-	return pressures;
+	return data;
 };
 
 const App = () => {
-	const [pressureRange, setPressureRange] = useState(3);
+	const [dataRange, setDataRange] = useState(3);
 	const [selectedColor, setSelectedColor] = useState(colorNames[0]);
 	const [showNumber, setShowNumber] = useState(false);
-	const [pressures, setPressures] = useState([]);
+	const [data, setData] = useState([]);
 	const [history, setHistory] = useState([]);
 	const [inputMode, setInputMode] = useState(mode[0]);
 	const [hex, setHex] = useState('#' + hexs[0]);
@@ -56,7 +56,7 @@ const App = () => {
 	};
 
 	useEffect(() => {
-		setPressures(generatePressures());
+		setData(generateHeatmapData());
 		window.addEventListener('click', closeOpenedColorPicker);
 
 		return () => window.removeEventListener('click', closeOpenedColorPicker);
@@ -65,12 +65,12 @@ const App = () => {
 	const colorSteps = useMemo(
 		() => {
 			const steps = [];
-			for (let i = 1; i <= pressureRange; i++) {
-				steps.push(100 * (i / pressureRange));
+			for (let i = 1; i <= dataRange; i++) {
+				steps.push(100 * (i / dataRange));
 			}
 			return steps;
 		},
-		[pressureRange]
+		[dataRange]
 	);
 
 	useEffect(
@@ -109,7 +109,7 @@ const App = () => {
 		() => {
 			if (version === 1 && rangeEnabled) {
 				let elems = [];
-				for (let i = pressureRange; i > 0; i--) {
+				for (let i = dataRange; i > 0; i--) {
 					elems.push(
 						<div key={i}>
 							<span
@@ -128,7 +128,7 @@ const App = () => {
 									width: 18,
 									height: 18,
 									border: 'solid 1px #111',
-									background: getColor && getColor(100 * (i / pressureRange))
+									background: getColor && getColor(100 * (i / dataRange))
 								}}
 							/>
 						</div>
@@ -161,7 +161,7 @@ const App = () => {
 				);
 			}
 		},
-		[version, rangeEnabled, getColor, pressureRange]
+		[version, rangeEnabled, getColor, dataRange]
 	);
 
 	const capture = useCallback(
@@ -181,7 +181,7 @@ const App = () => {
 						}
 
 						if (rangeEnabled) {
-							colorInfo += `, Range: ${pressureRange}`;
+							colorInfo += `, Range: ${dataRange}`;
 						}
 					} else {
 						const rgbs = customGradationColors.slice().reverse().map(([r, g, b], index) => {
@@ -204,7 +204,7 @@ const App = () => {
 					setHistory(newRecord);
 				});
 		},
-		[customGradationColors, hex, history, inputMode, pressureRange, rangeEnabled, selectedColor, version]
+		[customGradationColors, hex, history, inputMode, dataRange, rangeEnabled, selectedColor, version]
 	);
 
 	const onSetSelectedColor = (colorName, index) => {
@@ -219,7 +219,7 @@ const App = () => {
 					<Col span={5}>
 						{version === 1 ? (
 							<SimpleColorSelector
-								setPressureRange={setPressureRange}
+								setDataRange={setDataRange}
 								setInputMode={setInputMode}
 								inputMode={inputMode}
 								mode={mode}
@@ -245,7 +245,7 @@ const App = () => {
 							Sample{' '}
 							<button
 								title="Re-generate heatmap data"
-								onClick={() => setPressures(generatePressures())}
+								onClick={() => setData(generateHeatmapData())}
 								style={{ background: 'transparent', border: 'transparent', cursor: 'pointer' }}
 							>
 								<RedoOutlined />
@@ -262,7 +262,7 @@ const App = () => {
 									marginBottom: 10
 								}}
 							>
-								{pressures.map((pressure, index) => {
+								{data.map((value, index) => {
 									return (
 										<div
 											key={index}
@@ -272,10 +272,10 @@ const App = () => {
 												float: 'left',
 												borderRight: 'solid 1px lightblue',
 												borderBottom: 'solid 1px lightblue',
-												background: getColor(pressure, rangeEnabled)
+												background: getColor(value, rangeEnabled)
 											}}
 										>
-											{showNumber && pressure}
+											{showNumber && value}
 										</div>
 									);
 								})}
@@ -322,7 +322,7 @@ const App = () => {
 			inputMode,
 			legend,
 			openedColorPicker,
-			pressures,
+			data,
 			rangeEnabled,
 			selectedColor,
 			showNumber,

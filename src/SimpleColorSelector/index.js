@@ -5,12 +5,12 @@ import 'antd/dist/antd.css';
 
 const SimpleColorSelector = (props) => {
 
-	const { setPressureRange, setInputMode, inputMode, mode, selectedColor, onSetSelectedColor, setHex, hex,rangeEnabled, setRangeEnabled } = props;
+	const { setDataRange, setInputMode, inputMode, mode, selectedColor, onSetSelectedColor, setHex, hex,rangeEnabled, setRangeEnabled } = props;
 
 	return (
 		<>
 			<div><Checkbox checked={rangeEnabled} onChange={(e) => setRangeEnabled(e.target.checked)}/> Range:</div>
-			<InputNumber min={3} max={10} defaultValue={3} onChange={setPressureRange} disabled={!rangeEnabled}/>
+			<InputNumber min={3} max={10} defaultValue={3} onChange={setDataRange} disabled={!rangeEnabled}/>
 			<div style={{ margin: '15px 0 5px 0' }}>
 				<Radio.Group onChange={(e) => setInputMode(e.target.value)} value={inputMode}>
 					{mode.map((mode) => {
