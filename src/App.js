@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Row, Col, Switch, Button, Radio, Tooltip } from 'antd';
 import { InfoCircleOutlined, RedoOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
@@ -35,12 +35,28 @@ const App = () => {
 	const [getColor, setGetColor] = useState(null);
 	const [rangeEnabled, setRangeEnabled] = useState(false);
 	const [customGradationColors, setCustomGradationColors] = useState(initialColors);
+	const [openedColorPicker, setOpenedColorPicker] = useState(null);
 
 	const w3colorObj = w3color()(inputMode === mode[0] ? selectedColor : hex);
 	const hsl = w3colorObj.toHsl();
 
+	const openedColorPickerRef = useRef();
+
+	useEffect(
+		() => {
+			openedColorPickerRef.current = openedColorPicker;
+		},
+		[openedColorPicker]
+	);
+
 	useEffect(() => {
 		setPressures(generatePressures());
+
+		window.addEventListener('click', (e) => {
+			if (openedColorPickerRef.current !== null && e.target.className !== 'color-picker-trigger') {
+				setOpenedColorPicker(null);
+			}
+		});
 	}, []);
 
 	const colorSteps = useMemo(
@@ -211,6 +227,8 @@ const App = () => {
 							setGetColor={setGetColor}
 							colors={customGradationColors}
 							setColors={setCustomGradationColors}
+							openedColorPicker={openedColorPicker}
+							setOpenedColorPicker={setOpenedColorPicker}
 						/>
 					)}
 				</Col>

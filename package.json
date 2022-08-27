@@ -10,6 +10,7 @@
 		"antd": "^4.0.2",
 		"html2canvas": "^1.0.0-rc.5",
 		"react": "^16.13.0",
+		"react-colorful": "^5.6.1",
 		"react-dom": "^16.13.0",
 		"react-scripts": "3.4.0"
 	},
@@ -25,8 +26,16 @@
 		"extends": "react-app"
 	},
 	"browserslist": {
-		"production": [">0.2%", "not dead", "not op_mini all"],
-		"development": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
 	},
 	"devDependencies": {
 		"gh-pages": "^2.2.0"

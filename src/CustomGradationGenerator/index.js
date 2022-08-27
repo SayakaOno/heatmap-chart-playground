@@ -1,17 +1,20 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { InputNumber, Button } from 'antd';
+import { RgbColorPicker } from 'react-colorful';
 import { initialColors } from '../gradationGridData';
 import { getHeatMapColor } from '../utils';
 import './gradation.css';
 
 const CustomGradationGenerator = (props) => {
-	const { colors, setColors } = props;
+	const { colors, setColors, openedColorPicker, setOpenedColorPicker } = props;
 	const [gradientPointCount, setGradientPointCount] = useState(colors.length);
 
 	const { setGetColor } = props;
 
 	useEffect(
 		() => {
+			setOpenedColorPicker(null);
+
 			const newColors = [...colors];
 			if (colors.length > gradientPointCount) {
 				newColors.length = gradientPointCount;
@@ -63,12 +66,36 @@ const CustomGradationGenerator = (props) => {
 		);
 	};
 
+	const onSetOpenedColorPicker = (index) => {
+		let newOpenedColorPicker = null;
+		if (index !== openedColorPicker) {
+			newOpenedColorPicker = index;
+		}
+		setOpenedColorPicker(newOpenedColorPicker);
+	};
+
+	const onPickColor = ({ r, g, b }, index) => {
+		const newColors = colors.slice();
+		newColors[index] = [r, g, b];
+		setColors(newColors);
+	};
+
 	const colorInputs = useMemo(
 		() => {
 			const inputs = [];
 			for (let i = gradientPointCount - 1; i >= 0; i--) {
+				const [r, g, b] = colors[i];
+
 				inputs.push(
-					<div key={i} style={{ display: 'flex', marginBottom: 5 }}>
+					<div
+						className="color-picker-trigger"
+						key={i}
+						style={{ display: 'flex', marginBottom: 5, cursor: 'pointer', position: 'relative' }}
+						onClick={() => onSetOpenedColorPicker(i)}
+					>
+						{openedColorPicker === i && (
+							<RgbColorPicker color={{ r, g, b }} onChange={(rgb) => onPickColor(rgb, i)} />
+						)}
 						<div
 							className="gradation-demo__body__right__item"
 							style={{
@@ -110,7 +137,7 @@ const CustomGradationGenerator = (props) => {
 						value={gradientPointCount}
 						defaultValue={gradientPointCount}
 						onChange={onChangeInput}
-						style={{ marginBottom: 15 }}
+						style={{ marginBottom: 20 }}
 					/>
 					{colorInputs}
 				</div>
