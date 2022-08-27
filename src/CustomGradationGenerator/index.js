@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { InputNumber, Button } from 'antd';
 import { RgbColorPicker } from 'react-colorful';
 import { initialColors } from '../gradationGridData';
@@ -25,6 +25,7 @@ const CustomGradationGenerator = (props) => {
 			}
 			setColors(newColors);
 		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[gradientPointCount]
 	);
 
@@ -37,48 +38,61 @@ const CustomGradationGenerator = (props) => {
 			};
 			setGetColor(() => func);
 		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[gradientPointCount, colors]
 	);
 
-	const onChangeColor = (e, index) => {
-		const newColors = colors.slice();
-		const color = e.target.value.split(',').map((num) => +num);
-		newColors[index] = color;
-		setColors(newColors);
-	};
+	const onChangeColor = useCallback(
+		(e, index) => {
+			const newColors = colors.slice();
+			const color = e.target.value.split(',').map((num) => +num);
+			newColors[index] = color;
+			setColors(newColors);
+		},
+		[colors, setColors]
+	);
 
-	const renderButton = () => {
-		const onClick = () => {
-			setGradientPointCount(initialColors.length);
-			setColors(initialColors);
-		};
+	const button = useMemo(
+		() => {
+			const onClick = () => {
+				setGradientPointCount(initialColors.length);
+				setColors(initialColors);
+			};
 
-		return (
-			<div
-				style={{
-					textAlign: 'right',
-					marginTop: 20,
-					marginRight: 15
-				}}
-			>
-				<Button onClick={onClick}>Reset</Button>
-			</div>
-		);
-	};
+			return (
+				<div
+					style={{
+						textAlign: 'right',
+						marginTop: 20,
+						marginRight: 15
+					}}
+				>
+					<Button onClick={onClick}>Reset</Button>
+				</div>
+			);
+		},
+		[setColors]
+	);
 
-	const onSetOpenedColorPicker = (index) => {
-		let newOpenedColorPicker = null;
-		if (index !== openedColorPicker) {
-			newOpenedColorPicker = index;
-		}
-		setOpenedColorPicker(newOpenedColorPicker);
-	};
+	const onSetOpenedColorPicker = useCallback(
+		(index) => {
+			let newOpenedColorPicker = null;
+			if (index !== openedColorPicker) {
+				newOpenedColorPicker = index;
+			}
+			setOpenedColorPicker(newOpenedColorPicker);
+		},
+		[openedColorPicker, setOpenedColorPicker]
+	);
 
-	const onPickColor = ({ r, g, b }, index) => {
-		const newColors = colors.slice();
-		newColors[index] = [r, g, b];
-		setColors(newColors);
-	};
+	const onPickColor = useCallback(
+		({ r, g, b }, index) => {
+			const newColors = colors.slice();
+			newColors[index] = [r, g, b];
+			setColors(newColors);
+		},
+		[colors, setColors]
+	);
 
 	const colorInputs = useMemo(
 		() => {
@@ -117,7 +131,7 @@ const CustomGradationGenerator = (props) => {
 			}
 			return inputs;
 		},
-		[gradientPointCount, onChangeColor]
+		[gradientPointCount, onChangeColor, colors, onPickColor, onSetOpenedColorPicker, openedColorPicker]
 	);
 
 	const onChangeInput = (input) => {
@@ -142,7 +156,7 @@ const CustomGradationGenerator = (props) => {
 					{colorInputs}
 				</div>
 			</div>
-			{renderButton()}
+			{button}
 		</div>
 	);
 };

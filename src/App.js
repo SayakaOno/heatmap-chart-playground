@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { Row, Col, Switch, Button, Radio, Tooltip } from 'antd';
 import { InfoCircleOutlined, RedoOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
@@ -49,14 +49,17 @@ const App = () => {
 		[openedColorPicker]
 	);
 
+	const closeOpenedColorPicker = (e) => {
+		if (openedColorPickerRef.current !== null && e.target.className !== 'color-picker-trigger') {
+			setOpenedColorPicker(null);
+		}
+	};
+
 	useEffect(() => {
 		setPressures(generatePressures());
+		window.addEventListener('click', closeOpenedColorPicker);
 
-		window.addEventListener('click', (e) => {
-			if (openedColorPickerRef.current !== null && e.target.className !== 'color-picker-trigger') {
-				setOpenedColorPicker(null);
-			}
-		});
+		return () => window.removeEventListener('click', closeOpenedColorPicker);
 	}, []);
 
 	const colorSteps = useMemo(
@@ -80,6 +83,7 @@ const App = () => {
 				setGetColor(() => func);
 			}
 		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[version, hex, colorSteps]
 	);
 
@@ -160,151 +164,171 @@ const App = () => {
 		[version, rangeEnabled, getColor, pressureRange]
 	);
 
-	const capture = async () => {
-		html2canvas(document.querySelector('#capture'))
-			.then((canvas) => {
-				const imgData = canvas.toDataURL();
-				return imgData;
-			})
-			.then((imgData) => {
-				let colorInfo = 'Color: ';
-				if (version === 1) {
-					if (inputMode === mode[0]) {
-						colorInfo += selectedColor;
-					} else {
-						colorInfo += hex;
-					}
+	const capture = useCallback(
+		async () => {
+			html2canvas(document.querySelector('#capture'))
+				.then((canvas) => {
+					const imgData = canvas.toDataURL();
+					return imgData;
+				})
+				.then((imgData) => {
+					let colorInfo = 'Color: ';
+					if (version === 1) {
+						if (inputMode === mode[0]) {
+							colorInfo += selectedColor;
+						} else {
+							colorInfo += hex;
+						}
 
-					if (rangeEnabled) {
-						colorInfo += `, Range: ${pressureRange}`;
-					}
-				} else {
-					const rgbs = customGradationColors.slice().reverse().map(([r, g, b], index) => {
-						return (
-							<div key={index}>
-								[{r}, {g}, {b}]
+						if (rangeEnabled) {
+							colorInfo += `, Range: ${pressureRange}`;
+						}
+					} else {
+						const rgbs = customGradationColors.slice().reverse().map(([r, g, b], index) => {
+							return (
+								<div key={index}>
+									[{r}, {g}, {b}]
+								</div>
+							);
+						});
+						colorInfo = (
+							<div>
+								<span>Color </span>
+								<Tooltip title={rgbs}>
+									<InfoCircleOutlined />
+								</Tooltip>
 							</div>
 						);
-					});
-					colorInfo = (
-						<div>
-							<span>Color </span>
-							<Tooltip title={rgbs}>
-								<InfoCircleOutlined />
-							</Tooltip>
-						</div>
-					);
-				}
-				const newRecord = [...history, [colorInfo, imgData]];
-				setHistory(newRecord);
-			});
-	};
+					}
+					const newRecord = [...history, [colorInfo, imgData]];
+					setHistory(newRecord);
+				});
+		},
+		[customGradationColors, hex, history, inputMode, pressureRange, rangeEnabled, selectedColor, version]
+	);
 
 	const onSetSelectedColor = (colorName, index) => {
 		setSelectedColor(colorName);
 		setHex('#' + hexs[index]);
 	};
 
-	const renderBody = () => {
-		return (
-			<Row style={{ padding: 20, height: 'calc(100vh - 40px)' }}>
-				<Col span={5}>
-					{version === 1 ? (
-						<SimpleColorSelector
-							setPressureRange={setPressureRange}
-							setInputMode={setInputMode}
-							inputMode={inputMode}
-							mode={mode}
-							selectedColor={selectedColor}
-							onSetSelectedColor={onSetSelectedColor}
-							setHex={setHex}
-							hex={hex}
-							rangeEnabled={rangeEnabled}
-							setRangeEnabled={setRangeEnabled}
-						/>
-					) : (
-						<CustomGradationGenerator
-							setGetColor={setGetColor}
-							colors={customGradationColors}
-							setColors={setCustomGradationColors}
-							openedColorPicker={openedColorPicker}
-							setOpenedColorPicker={setOpenedColorPicker}
-						/>
-					)}
-				</Col>
-				<Col span={9}>
-					<h2>
-						Sample{' '}
-						<button
-							title="Re-generate heatmap data"
-							onClick={() => setPressures(generatePressures())}
-							style={{ background: 'transparent', border: 'transparent', cursor: 'pointer' }}
-						>
-							<RedoOutlined />
-						</button>
-					</h2>
-					<div id="capture" style={{ display: 'flex' }}>
-						<div style={{ marginRight: 10, width: 41 }}>{legend}</div>
-						<div
-							style={{
-								width: 401,
-								height: 241,
-								borderTop: 'solid 1px lightblue',
-								borderLeft: 'solid 1px lightblue',
-								marginBottom: 10
-							}}
-						>
-							{pressures.map((pressure, index) => {
-								return (
-									<div
-										key={index}
-										style={{
-											width: 20,
-											height: 20,
-											float: 'left',
-											borderRight: 'solid 1px lightblue',
-											borderBottom: 'solid 1px lightblue',
-											background: getColor(pressure, rangeEnabled)
-										}}
-									>
-										{showNumber && pressure}
-									</div>
-								);
-							})}
-						</div>
-					</div>
-					<div style={{ marginLeft: 46 }}>
-						<Switch
-							checked={showNumber}
-							style={{ marginRight: 10 }}
-							onChange={() => setShowNumber(!showNumber)}
-						/>
-						<span>Show numbers</span>
-					</div>
-					<Button onClick={capture} style={{ marginLeft: 350 }}>
-						Capture
-					</Button>
-				</Col>
-				<Col span={10} style={{ height: 'calc(100vh - 40px)', overflow: 'scroll' }}>
-					{history.length ? (
-						<div style={{ marginLeft: 30, marginBottom: 50 }}>
-							<h2>History</h2>
-							<div>
-								{history.map((item, index) => {
+	const body = useMemo(
+		() => {
+			return (
+				<Row style={{ padding: 20, height: 'calc(100vh - 40px)' }}>
+					<Col span={5}>
+						{version === 1 ? (
+							<SimpleColorSelector
+								setPressureRange={setPressureRange}
+								setInputMode={setInputMode}
+								inputMode={inputMode}
+								mode={mode}
+								selectedColor={selectedColor}
+								onSetSelectedColor={onSetSelectedColor}
+								setHex={setHex}
+								hex={hex}
+								rangeEnabled={rangeEnabled}
+								setRangeEnabled={setRangeEnabled}
+							/>
+						) : (
+							<CustomGradationGenerator
+								setGetColor={setGetColor}
+								colors={customGradationColors}
+								setColors={setCustomGradationColors}
+								openedColorPicker={openedColorPicker}
+								setOpenedColorPicker={setOpenedColorPicker}
+							/>
+						)}
+					</Col>
+					<Col span={9}>
+						<h2>
+							Sample{' '}
+							<button
+								title="Re-generate heatmap data"
+								onClick={() => setPressures(generatePressures())}
+								style={{ background: 'transparent', border: 'transparent', cursor: 'pointer' }}
+							>
+								<RedoOutlined />
+							</button>
+						</h2>
+						<div id="capture" style={{ display: 'flex' }}>
+							<div style={{ marginRight: 10, width: 41 }}>{legend}</div>
+							<div
+								style={{
+									width: 401,
+									height: 241,
+									borderTop: 'solid 1px lightblue',
+									borderLeft: 'solid 1px lightblue',
+									marginBottom: 10
+								}}
+							>
+								{pressures.map((pressure, index) => {
 									return (
-										<div key={index} style={{ float: 'left', width: '50%' }}>
-											<div>{item[0]}</div>
-											<img src={item[1]} style={{ width: '100%' }} />
+										<div
+											key={index}
+											style={{
+												width: 20,
+												height: 20,
+												float: 'left',
+												borderRight: 'solid 1px lightblue',
+												borderBottom: 'solid 1px lightblue',
+												background: getColor(pressure, rangeEnabled)
+											}}
+										>
+											{showNumber && pressure}
 										</div>
 									);
 								})}
 							</div>
 						</div>
-					) : null}
-				</Col>
-			</Row>
-		);
-	};
+						<div style={{ marginLeft: 46 }}>
+							<Switch
+								checked={showNumber}
+								style={{ marginRight: 10 }}
+								onChange={() => setShowNumber(!showNumber)}
+							/>
+							<span>Show numbers</span>
+						</div>
+						<Button onClick={capture} style={{ marginLeft: 350 }}>
+							Capture
+						</Button>
+					</Col>
+					<Col span={10} style={{ height: 'calc(100vh - 40px)', overflow: 'scroll' }}>
+						{history.length ? (
+							<div style={{ marginLeft: 30, marginBottom: 50 }}>
+								<h2>History</h2>
+								<div>
+									{history.map((item, index) => {
+										return (
+											<div key={index} style={{ float: 'left', width: '50%' }}>
+												<div>{item[0]}</div>
+												<img src={item[1]} style={{ width: '100%' }} alt="" />
+											</div>
+										);
+									})}
+								</div>
+							</div>
+						) : null}
+					</Col>
+				</Row>
+			);
+		},
+		[
+			capture,
+			customGradationColors,
+			getColor,
+			hex,
+			history,
+			inputMode,
+			legend,
+			openedColorPicker,
+			pressures,
+			rangeEnabled,
+			selectedColor,
+			showNumber,
+			version
+		]
+	);
 
 	return (
 		<div style={{ minWidth: 1250, margin: 15 }}>
@@ -316,7 +340,7 @@ const App = () => {
 					Specify RGBs
 				</Radio>
 			</Radio.Group>
-			{renderBody()}
+			{body}
 		</div>
 	);
 };
