@@ -26,7 +26,7 @@ const SimpleColorSelector = (props) => {
 			{inputMode === mode[0] ? (
 				<Palette selectedColor={selectedColor} setSelectedColor={onSetSelectedColor} />
 			) : (
-				<div style={{ margin: '15px 0 5px 0', width: 110, display: 'flex' }}>
+				<div style={{ margin: '15px 0 5px 0', width: 150, display: 'flex' }}>
 					<Input onChange={(e) => setHex(e.target.value)} value={hex} />
 					<span
 						style={{

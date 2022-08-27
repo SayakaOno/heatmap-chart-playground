@@ -307,7 +307,7 @@ const App = () => {
 	};
 
 	return (
-		<div>
+		<div style={{ minWidth: 1250, margin: 15 }}>
 			<Radio.Group onChange={(e) => setVersion(e.target.value)} value={version}>
 				<Radio key={1} value={1}>
 					Select colour
