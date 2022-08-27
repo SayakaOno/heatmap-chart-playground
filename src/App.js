@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Row, Col, Switch, Button, Radio, Tooltip } from 'antd';
-import { InfoCircleOutlined } from '@ant-design/icons';
+import { InfoCircleOutlined, RedoOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
 import html2canvas from 'html2canvas';
 import SimpleColorSelector from './SimpleColorSelector';
@@ -163,15 +163,21 @@ const App = () => {
 						colorInfo += `, Range: ${pressureRange}`;
 					}
 				} else {
-					const rgbs = customGradationColors.slice().reverse().map(([r,g,b], index) => {
-						return <div key={index}>[{r}, {g}, {b}]</div>
+					const rgbs = customGradationColors.slice().reverse().map(([r, g, b], index) => {
+						return (
+							<div key={index}>
+								[{r}, {g}, {b}]
+							</div>
+						);
 					});
-					colorInfo = <>
+					colorInfo = (
+						<div>
 							<span>Color </span>
 							<Tooltip title={rgbs}>
 								<InfoCircleOutlined />
 							</Tooltip>
-						</>
+						</div>
+					);
 				}
 				const newRecord = [...history, [colorInfo, imgData]];
 				setHistory(newRecord);
@@ -209,7 +215,16 @@ const App = () => {
 					)}
 				</Col>
 				<Col span={9}>
-					<h2>Sample</h2>
+					<h2>
+						Sample{' '}
+						<button
+							title="Re-generate heatmap data"
+							onClick={() => setPressures(generatePressures())}
+							style={{ background: 'transparent', border: 'transparent', cursor: 'pointer' }}
+						>
+							<RedoOutlined />
+						</button>
+					</h2>
 					<div id="capture" style={{ display: 'flex' }}>
 						<div style={{ marginRight: 10, width: 41 }}>{legend}</div>
 						<div
