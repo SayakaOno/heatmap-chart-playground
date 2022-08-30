@@ -161,6 +161,9 @@ const App = () => {
 
 	const capture = useCallback(
 		async () => {
+			const pageYOffset = window.pageYOffset;
+			window.scrollTo(0, 0);
+
 			html2canvas(document.querySelector('#capture'))
 				.then((canvas) => {
 					const imgData = canvas.toDataURL();
@@ -197,6 +200,8 @@ const App = () => {
 					}
 					const newRecord = [...history, [colorInfo, imgData]];
 					setHistory(newRecord);
+
+					window.scrollTo(0, pageYOffset);
 				});
 		},
 		[customGradationColors, hex, history, inputMode, dataRange, rangeEnabled, selectedColor, version]
