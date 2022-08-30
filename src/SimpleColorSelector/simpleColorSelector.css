@@ -1,0 +1,9 @@
+.palette li:focus {
+	outline: none;
+}
+
+.simple-color-selector .react-colorful {
+	position: absolute !important;
+	z-index: 2;
+	top: 32px;
+}

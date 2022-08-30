@@ -10,7 +10,7 @@ const CustomGradationGenerator = (props) => {
 	const [gradientPointCount, setGradientPointCount] = useState(colors.length);
 	const [openedColorPicker, setOpenedColorPicker] = useState(null);
 
-	const openedColorPickerRef = useRef();
+	const openedColorPickerRef = useRef(null);
 
 	const { setGetColor } = props;
 
