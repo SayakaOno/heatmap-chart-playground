@@ -1,25 +1,25 @@
 {
   "files": {
-    "main.css": "/heatmap-color-playground/static/css/main.006d906c.chunk.css",
-    "main.js": "/heatmap-color-playground/static/js/main.b9a51e5a.chunk.js",
-    "main.js.map": "/heatmap-color-playground/static/js/main.b9a51e5a.chunk.js.map",
+    "main.css": "/heatmap-color-playground/static/css/main.be1bcafe.chunk.css",
+    "main.js": "/heatmap-color-playground/static/js/main.eb7aeb66.chunk.js",
+    "main.js.map": "/heatmap-color-playground/static/js/main.eb7aeb66.chunk.js.map",
     "runtime-main.js": "/heatmap-color-playground/static/js/runtime-main.a1a8d481.js",
     "runtime-main.js.map": "/heatmap-color-playground/static/js/runtime-main.a1a8d481.js.map",
     "static/css/2.1bd2ab2f.chunk.css": "/heatmap-color-playground/static/css/2.1bd2ab2f.chunk.css",
-    "static/js/2.0e925995.chunk.js": "/heatmap-color-playground/static/js/2.0e925995.chunk.js",
-    "static/js/2.0e925995.chunk.js.map": "/heatmap-color-playground/static/js/2.0e925995.chunk.js.map",
+    "static/js/2.e935c7b4.chunk.js": "/heatmap-color-playground/static/js/2.e935c7b4.chunk.js",
+    "static/js/2.e935c7b4.chunk.js.map": "/heatmap-color-playground/static/js/2.e935c7b4.chunk.js.map",
     "index.html": "/heatmap-color-playground/index.html",
-    "precache-manifest.5459cbf4f2af913b4e2356f9abf71737.js": "/heatmap-color-playground/precache-manifest.5459cbf4f2af913b4e2356f9abf71737.js",
+    "precache-manifest.946d78d266ef7781884c63bf821e1121.js": "/heatmap-color-playground/precache-manifest.946d78d266ef7781884c63bf821e1121.js",
     "service-worker.js": "/heatmap-color-playground/service-worker.js",
     "static/css/2.1bd2ab2f.chunk.css.map": "/heatmap-color-playground/static/css/2.1bd2ab2f.chunk.css.map",
-    "static/css/main.006d906c.chunk.css.map": "/heatmap-color-playground/static/css/main.006d906c.chunk.css.map",
-    "static/js/2.0e925995.chunk.js.LICENSE.txt": "/heatmap-color-playground/static/js/2.0e925995.chunk.js.LICENSE.txt"
+    "static/css/main.be1bcafe.chunk.css.map": "/heatmap-color-playground/static/css/main.be1bcafe.chunk.css.map",
+    "static/js/2.e935c7b4.chunk.js.LICENSE.txt": "/heatmap-color-playground/static/js/2.e935c7b4.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.a1a8d481.js",
     "static/css/2.1bd2ab2f.chunk.css",
-    "static/js/2.0e925995.chunk.js",
-    "static/css/main.006d906c.chunk.css",
-    "static/js/main.b9a51e5a.chunk.js"
+    "static/js/2.e935c7b4.chunk.js",
+    "static/css/main.be1bcafe.chunk.css",
+    "static/js/main.eb7aeb66.chunk.js"
   ]
 }
