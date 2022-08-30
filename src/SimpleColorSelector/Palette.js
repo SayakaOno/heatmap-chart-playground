@@ -32,7 +32,7 @@ const Palette = props => {
           <span>used colors</span>
         </div>
       }
-      <ul className="palette" style={{ width: 200, margin: 0, padding: 0 }}>
+      <ul className="palette" style={{ margin: 0, marginRight: 30, padding: 0 }}>
         {colors.map((color, index) => {
           return (
             <Tooltip title={color} key={color}>
