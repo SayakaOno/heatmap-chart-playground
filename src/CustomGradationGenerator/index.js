@@ -96,6 +96,10 @@ const CustomGradationGenerator = (props) => {
 
 	const colorInputs = useMemo(
 		() => {
+			if (gradientPointCount !== colors.length) {
+				return null;
+			}
+
 			const inputs = [];
 			for (let i = gradientPointCount - 1; i >= 0; i--) {
 				const [r, g, b] = colors[i];
