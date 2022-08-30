@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Row, Col, Switch, Button, Radio, Tooltip } from 'antd';
 import { InfoCircleOutlined, RedoOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
@@ -7,7 +7,6 @@ import SimpleColorSelector from './SimpleColorSelector';
 import CustomGradationGenerator from './CustomGradationGenerator';
 import w3color, { hexs, colorNames } from './w3color';
 import { initialColors } from './gradationGridData';
-import './App.css';
 
 const mode = ['Color name', 'Hex'];
 
@@ -35,31 +34,12 @@ const App = () => {
 	const [getColor, setGetColor] = useState(null);
 	const [rangeEnabled, setRangeEnabled] = useState(false);
 	const [customGradationColors, setCustomGradationColors] = useState(initialColors);
-	const [openedColorPicker, setOpenedColorPicker] = useState(null);
 
 	const w3colorObj = w3color()(inputMode === mode[0] ? selectedColor : hex);
 	const hsl = w3colorObj.toHsl();
 
-	const openedColorPickerRef = useRef();
-
-	useEffect(
-		() => {
-			openedColorPickerRef.current = openedColorPicker;
-		},
-		[openedColorPicker]
-	);
-
-	const closeOpenedColorPicker = (e) => {
-		if (openedColorPickerRef.current !== null && e.target.className !== 'color-picker-trigger') {
-			setOpenedColorPicker(null);
-		}
-	};
-
 	useEffect(() => {
 		setData(generateHeatmapData());
-		window.addEventListener('click', closeOpenedColorPicker);
-
-		return () => window.removeEventListener('click', closeOpenedColorPicker);
 	}, []);
 
 	const colorSteps = useMemo(
@@ -235,8 +215,6 @@ const App = () => {
 								setGetColor={setGetColor}
 								colors={customGradationColors}
 								setColors={setCustomGradationColors}
-								openedColorPicker={openedColorPicker}
-								setOpenedColorPicker={setOpenedColorPicker}
 							/>
 						)}
 					</Col>
@@ -321,7 +299,6 @@ const App = () => {
 			history,
 			inputMode,
 			legend,
-			openedColorPicker,
 			data,
 			rangeEnabled,
 			selectedColor,

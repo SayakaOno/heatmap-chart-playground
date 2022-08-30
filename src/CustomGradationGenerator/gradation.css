@@ -36,7 +36,7 @@
 	text-align: center;
 }
 
-.react-colorful {
+.gradation-demo .react-colorful {
 	position: absolute !important;
 	z-index: 9999;
 	top: 24px;

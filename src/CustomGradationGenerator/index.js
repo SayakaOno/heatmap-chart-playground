@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { InputNumber, Button } from 'antd';
 import { RgbColorPicker } from 'react-colorful';
 import { initialColors } from '../gradationGridData';
@@ -6,10 +6,32 @@ import { getHeatMapColor } from '../utils';
 import './gradation.css';
 
 const CustomGradationGenerator = (props) => {
-	const { colors, setColors, openedColorPicker, setOpenedColorPicker } = props;
+	const { colors, setColors } = props;
 	const [gradientPointCount, setGradientPointCount] = useState(colors.length);
+	const [openedColorPicker, setOpenedColorPicker] = useState(null);
+
+	const openedColorPickerRef = useRef();
 
 	const { setGetColor } = props;
+
+	useEffect(
+		() => {
+			openedColorPickerRef.current = openedColorPicker;
+		},
+		[openedColorPicker]
+	);
+
+	const closeOpenedColorPicker = (e) => {
+		if (openedColorPickerRef.current !== null && e.target.className !== 'color-picker-trigger') {
+			setOpenedColorPicker(null);
+		}
+	};
+
+	useEffect(() => {
+		window.addEventListener('click', closeOpenedColorPicker);
+
+		return () => window.removeEventListener('click', closeOpenedColorPicker);
+	}, []);
 
 	useEffect(
 		() => {
@@ -108,8 +130,7 @@ const CustomGradationGenerator = (props) => {
 					<div
 						className="color-picker-trigger"
 						key={i}
-						style={{ display: 'flex', marginBottom: 5, cursor: 'pointer', position: 'relative' }}
-						onClick={() => onSetOpenedColorPicker(i)}
+						style={{ display: 'flex', marginBottom: 5, position: 'relative' }}
 					>
 						{openedColorPicker === i && (
 							<RgbColorPicker color={{ r, g, b }} onChange={(rgb) => onPickColor(rgb, i)} />
@@ -117,8 +138,10 @@ const CustomGradationGenerator = (props) => {
 						<div
 							className="gradation-demo__body__right__item"
 							style={{
-								backgroundColor: `rgb(${colors[i]})`
+								backgroundColor: `rgb(${colors[i]})`,
+								cursor: 'pointer'
 							}}
+							onClick={() => onSetOpenedColorPicker(i)}
 						>
 							{i}
 						</div>
