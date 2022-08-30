@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { Row, Col, Switch, Button, Radio, Tooltip } from 'antd';
 import { InfoCircleOutlined, RedoOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
@@ -9,6 +9,8 @@ import w3color, { hexs, colorNames } from './w3color';
 import { initialColors } from './gradationGridData';
 
 const mode = ['Color name', 'Hex'];
+
+const LEGEND_WIDTH = 51;
 
 const getRandomNumber = () => {
 	return Math.floor(Math.random() * 101);
@@ -34,12 +36,25 @@ const App = () => {
 	const [getColor, setGetColor] = useState(null);
 	const [rangeEnabled, setRangeEnabled] = useState(false);
 	const [customGradationColors, setCustomGradationColors] = useState(initialColors);
+	const [cellWidth, setCellWidth] = useState(null);
+
+	const sampleGridRef = useRef(null);
 
 	const w3colorObj = w3color()(inputMode === mode[0] ? selectedColor : hex);
 	const hsl = w3colorObj.toHsl();
 
+	const onSetCellWidth = () => {
+		const containerWidth = Math.min(sampleGridRef.current.offsetWidth - LEGEND_WIDTH - 2, 441);
+		setCellWidth(Math.floor(containerWidth / 20));
+	};
+
 	useEffect(() => {
 		setData(generateHeatmapData());
+		onSetCellWidth();
+
+		window.addEventListener('resize', onSetCellWidth);
+
+		return () => window.removeEventListener('resize', onSetCellWidth);
 	}, []);
 
 	const colorSteps = useMemo(
@@ -132,7 +147,7 @@ const App = () => {
 										color: '#fff',
 										content: '',
 										width: 18,
-										height: 240 / values.length
+										height: cellWidth * 12 / values.length
 									}}
 								/>
 							);
@@ -141,7 +156,7 @@ const App = () => {
 				);
 			}
 		},
-		[version, rangeEnabled, getColor, dataRange]
+		[version, rangeEnabled, getColor, dataRange, cellWidth]
 	);
 
 	const capture = useCallback(
@@ -195,8 +210,8 @@ const App = () => {
 	const body = useMemo(
 		() => {
 			return (
-				<Row style={{ padding: 20, height: 'calc(100vh - 40px)' }}>
-					<Col span={5}>
+				<Row style={{ padding: '20px 0 0 20px', height: 'calc(100vh - 60px)' }}>
+					<Col xl={5} lg={5} md={8} xs={24} style={{ marginBottom: 20 }}>
 						{version === 1 ? (
 							<SimpleColorSelector
 								setDataRange={setDataRange}
@@ -218,7 +233,7 @@ const App = () => {
 							/>
 						)}
 					</Col>
-					<Col span={9}>
+					<Col xl={9} lg={11} md={16} xs={24} style={{ marginBottom: 20 }}>
 						<h2>
 							Sample{' '}
 							<button
@@ -229,12 +244,18 @@ const App = () => {
 								<RedoOutlined />
 							</button>
 						</h2>
-						<div id="capture" style={{ display: 'flex' }}>
+						<div
+							ref={sampleGridRef}
+							id="capture"
+							style={{
+								display: 'flex'
+							}}
+						>
 							<div style={{ marginRight: 10, width: 41 }}>{legend}</div>
 							<div
 								style={{
-									width: 401,
-									height: 241,
+									maxWidth: 441,
+									width: cellWidth * 20 + 1,
 									borderTop: 'solid 1px lightblue',
 									borderLeft: 'solid 1px lightblue',
 									marginBottom: 10
@@ -245,8 +266,8 @@ const App = () => {
 										<div
 											key={index}
 											style={{
-												width: 20,
-												height: 20,
+												width: cellWidth,
+												height: cellWidth,
 												float: 'left',
 												borderRight: 'solid 1px lightblue',
 												borderBottom: 'solid 1px lightblue',
@@ -259,31 +280,50 @@ const App = () => {
 								})}
 							</div>
 						</div>
-						<div style={{ marginLeft: 46 }}>
+						<div style={{ marginLeft: 46, maxWidth: 451 }}>
 							<Switch
 								checked={showNumber}
 								style={{ marginRight: 10 }}
 								onChange={() => setShowNumber(!showNumber)}
 							/>
 							<span>Show numbers</span>
+							<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+								<Button onClick={capture}>Capture</Button>
+							</div>
 						</div>
-						<Button onClick={capture} style={{ marginLeft: 350 }}>
-							Capture
-						</Button>
 					</Col>
-					<Col span={10} style={{ height: 'calc(100vh - 40px)', overflow: 'scroll' }}>
+					<Col xl={10} lg={8} md={24} xs={24}>
 						{history.length ? (
-							<div style={{ marginLeft: 30, marginBottom: 50 }}>
+							<div style={{ marginLeft: 30 }}>
 								<h2>History</h2>
-								<div>
-									{history.map((item, index) => {
-										return (
-											<div key={index} style={{ float: 'left', width: '50%' }}>
-												<div>{item[0]}</div>
-												<img src={item[1]} style={{ width: '100%' }} alt="" />
-											</div>
-										);
-									})}
+								<div
+									style={{
+										maxHeight: 'calc(100vh - 110px)',
+										overflow: 'scroll'
+									}}
+								>
+									<div
+										style={{
+											display: 'flex',
+											flexWrap: 'wrap'
+										}}
+									>
+										{history.map((item, index) => {
+											return (
+												<div
+													key={index}
+													style={{
+														width: 230,
+														marginRight: 10,
+														marginBottom: 10
+													}}
+												>
+													<div>{item[0]}</div>
+													<img src={item[1]} style={{ width: '100%' }} alt="" />
+												</div>
+											);
+										})}
+									</div>
 								</div>
 							</div>
 						) : null}
@@ -303,12 +343,13 @@ const App = () => {
 			rangeEnabled,
 			selectedColor,
 			showNumber,
-			version
+			version,
+			cellWidth
 		]
 	);
 
 	return (
-		<div style={{ minWidth: 1250, margin: 15 }}>
+		<div style={{ padding: 15 }}>
 			<Radio.Group onChange={(e) => setVersion(e.target.value)} value={version}>
 				<Radio key={1} value={1}>
 					Select colour

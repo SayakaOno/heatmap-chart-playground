@@ -150,7 +150,7 @@ const CustomGradationGenerator = (props) => {
 							value={colors[i]}
 							onChange={(e) => onChangeColor(e, i)}
 							type="text"
-							style={{ border: 'none', background: '#f1f1f1' }}
+							style={{ border: 'none', background: '#f1f1f1', width: 'auto' }}
 						/>
 						<span>)</span>
 					</div>
@@ -182,8 +182,8 @@ const CustomGradationGenerator = (props) => {
 					/>
 					{colorInputs}
 				</div>
+				{button}
 			</div>
-			{button}
 		</div>
 	);
 };

@@ -1,10 +1,5 @@
-.gradation {
-	margin: 30px;
-	width: 1200px;
-	margin-bottom: 100px;
-}
-
 .gradation-demo {
+	width: 180px;
 	margin-bottom: 30px;
 }
 
@@ -13,27 +8,31 @@
 	margin-bottom: 30px;
 }
 
-.gradation-demo__body {
+/* .gradation-demo__body {
 	display: flex;
 	align-items: flex-start;
-}
+} */
 
-.gradation-demo__body__left {
+/* .gradation-demo__body__left {
 	display: flex;
 	margin-right: 30px;
-}
-
+} */
+/* 
 .grid {
 	display: flex;
 	flex-wrap: wrap;
 	width: 280px;
 	margin-right: 10px;
-}
+} */
 
 .gradation-demo__body__right__item {
 	width: 24px;
 	margin-right: 15px;
 	text-align: center;
+}
+
+.color-picker-trigger input {
+	width: 100px !important;
 }
 
 .gradation-demo .react-colorful {
