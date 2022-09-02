@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "a30729de6388abec4197b3fd498ac67c",
+    "revision": "e333442915dba52d98e4c42e0cf2b94c",
     "url": "/heatmap-color-playground/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/heatmap-color-playground/static/css/2.1bd2ab2f.chunk.css"
   },
   {
-    "revision": "6b7ef904eef94d53f228",
+    "revision": "2954cab107e0a14a12d6",
     "url": "/heatmap-color-playground/static/css/main.357a0d2b.chunk.css"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/heatmap-color-playground/static/js/2.222c4134.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "6b7ef904eef94d53f228",
-    "url": "/heatmap-color-playground/static/js/main.32417ea2.chunk.js"
+    "revision": "2954cab107e0a14a12d6",
+    "url": "/heatmap-color-playground/static/js/main.107c7f30.chunk.js"
   },
   {
     "revision": "347affe9ffa3bde8e771",

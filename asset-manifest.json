@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/heatmap-color-playground/static/css/main.357a0d2b.chunk.css",
-    "main.js": "/heatmap-color-playground/static/js/main.32417ea2.chunk.js",
-    "main.js.map": "/heatmap-color-playground/static/js/main.32417ea2.chunk.js.map",
+    "main.js": "/heatmap-color-playground/static/js/main.107c7f30.chunk.js",
+    "main.js.map": "/heatmap-color-playground/static/js/main.107c7f30.chunk.js.map",
     "runtime-main.js": "/heatmap-color-playground/static/js/runtime-main.a1a8d481.js",
     "runtime-main.js.map": "/heatmap-color-playground/static/js/runtime-main.a1a8d481.js.map",
     "static/css/2.1bd2ab2f.chunk.css": "/heatmap-color-playground/static/css/2.1bd2ab2f.chunk.css",
     "static/js/2.222c4134.chunk.js": "/heatmap-color-playground/static/js/2.222c4134.chunk.js",
     "static/js/2.222c4134.chunk.js.map": "/heatmap-color-playground/static/js/2.222c4134.chunk.js.map",
     "index.html": "/heatmap-color-playground/index.html",
-    "precache-manifest.e22aa586506e369e7bc6ab0494d95e09.js": "/heatmap-color-playground/precache-manifest.e22aa586506e369e7bc6ab0494d95e09.js",
+    "precache-manifest.f2c7ffd35136e46b4470d1ae8fabd455.js": "/heatmap-color-playground/precache-manifest.f2c7ffd35136e46b4470d1ae8fabd455.js",
     "service-worker.js": "/heatmap-color-playground/service-worker.js",
     "static/css/2.1bd2ab2f.chunk.css.map": "/heatmap-color-playground/static/css/2.1bd2ab2f.chunk.css.map",
     "static/css/main.357a0d2b.chunk.css.map": "/heatmap-color-playground/static/css/main.357a0d2b.chunk.css.map",
@@ -20,6 +20,6 @@
     "static/css/2.1bd2ab2f.chunk.css",
     "static/js/2.222c4134.chunk.js",
     "static/css/main.357a0d2b.chunk.css",
-    "static/js/main.32417ea2.chunk.js"
+    "static/js/main.107c7f30.chunk.js"
   ]
 }

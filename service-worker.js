@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/heatmap-color-playground/precache-manifest.e22aa586506e369e7bc6ab0494d95e09.js"
+  "/heatmap-color-playground/precache-manifest.f2c7ffd35136e46b4470d1ae8fabd455.js"
 );
 
 self.addEventListener('message', (event) => {
