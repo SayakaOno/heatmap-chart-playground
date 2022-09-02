@@ -1,16 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import 'antd/dist/antd.css';
-import { Checkbox, Tooltip } from 'antd';
-import { colorNames, usedColors } from './../w3color';
+import { Tooltip } from 'antd';
+import { colorNames as colors } from './../w3color';
 import './simpleColorSelector.css';
 
-const disableUsedColor = true;
-
 const Palette = props => {
-  const [filtered, setFiltered] = useState(true);
-  const colors = !disableUsedColor && filtered
-    ? colorNames.filter(color => usedColors.includes(color))
-    : colorNames;
 
   const selectColorWithKey = e => {
     const index = colors.indexOf(props.selectedColor);
@@ -26,12 +20,6 @@ const Palette = props => {
       <div style={{ margin: '15px 0 5px 0' }}>
         Color: <b>{props.selectedColor}</b>
       </div>
-      {!disableUsedColor &&
-        <div>
-          <Checkbox checked={filtered} onChange={() => setFiltered(!filtered)} />
-          <span>used colors</span>
-        </div>
-      }
       <ul className="palette" style={{ margin: 0, marginRight: 30, padding: 0 }}>
         {colors.map((color, index) => {
           return (

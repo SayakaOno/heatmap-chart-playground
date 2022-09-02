@@ -1,35 +1,3 @@
-/* w3color.js ver.1.18 by w3schools.com (Do not remove this line)*/
-export const usedColors = [
-	'Brown',
-	'CadetBlue',
-	'Coral',
-	'DarkBlue',
-	'DarkCyan',
-	'DarkGreen',
-	'DarkMagenta',
-	'DarkOliveGreen',
-	'DarkOrange',
-	'DarkSlateBlue',
-	'DarkSlateGrey',
-	'FireBrick',
-	'ForestGreen',
-	'GoldenRod',
-	'Gray',
-	'Green',
-	'IndianRed',
-	'LightCoral',
-	'MediumBlue',
-	'MediumSeaGreen',
-	'Navy',
-	'RebeccaPurple',
-	'Salmon',
-	'SeaGreen',
-	'SlateBlue',
-	'SteelBlue',
-	'Teal',
-	'Tomato'
-];
-
 export const colorNames = [
 	'AliceBlue',
 	'AntiqueWhite',
@@ -332,6 +300,8 @@ export const hexs = [
 	'9acd32'
 ];
 
+// https://www.w3schools.com/colors/colors_converter.asp
+/* w3color.js ver.1.18 by w3schools.com (Do not remove this line)*/
 export default function() {
 	function w3color(color, elmnt) {
 		if (!(this instanceof w3color)) {
