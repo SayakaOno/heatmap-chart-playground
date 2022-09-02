@@ -8,23 +8,6 @@
 	margin-bottom: 30px;
 }
 
-/* .gradation-demo__body {
-	display: flex;
-	align-items: flex-start;
-} */
-
-/* .gradation-demo__body__left {
-	display: flex;
-	margin-right: 30px;
-} */
-/* 
-.grid {
-	display: flex;
-	flex-wrap: wrap;
-	width: 280px;
-	margin-right: 10px;
-} */
-
 .gradation-demo__body__right__item {
 	width: 24px;
 	margin-right: 15px;
