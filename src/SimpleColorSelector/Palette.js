@@ -9,9 +9,9 @@ const Palette = props => {
   const selectColorWithKey = e => {
     const index = colors.indexOf(props.selectedColor);
     if (e.keyCode === 39 && index !== colors.length - 1) {
-      props.setSelectedColor(colors[index + 1]);
+      props.setSelectedColor(colors[index + 1], index + 1);
     } else if (e.keyCode === 37 && !(index < 1)) {
-      props.setSelectedColor(colors[index - 1]);
+      props.setSelectedColor(colors[index - 1], index - 1);
     }
   };
 
