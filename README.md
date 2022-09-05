@@ -7,22 +7,22 @@ Please try it out [here](https://sayakaono.github.io/heatmap-color-playground/)!
 - **History (Capture functionality)**<br />
 Users can compare different colors and ranges within the app and make decisions easily.
 - **Show numbers on heatmap**<br />
-![show-numbers](https://user-images.githubusercontent.com/33141219/188223642-c8f722f8-4b51-4472-8dbc-a10153215ad3.png)
 Users can show numbers on heatmap so that they can understand what number is mapped to which color.
+![show-numbers](https://user-images.githubusercontent.com/33141219/188223642-c8f722f8-4b51-4472-8dbc-a10153215ad3.png)
 
 ### Tool1
-**Generates a gradient by selecting a color from the pallet or specifying a hex value.**<br />
-
-![tool1](https://user-images.githubusercontent.com/33141219/188223377-6053f11d-e2a9-45da-9597-d12a29dd55a7.gif)
+**Generates a gradient by selecting a color from the pallet or specifying a hex value.**
 - Users can specify a range(3 - 10) in case they want to use a specific range of colors.
 - The color picker helps users specify a hex value.
 
+![tool1](https://user-images.githubusercontent.com/33141219/188223377-6053f11d-e2a9-45da-9597-d12a29dd55a7.gif)
 
 ### Tool2
 **Generates a gradient by specifying RGBs as gradient points.**
-![tool2](https://user-images.githubusercontent.com/33141219/188221460-370cfefc-b1cd-47fa-954e-cf1114e21dca.gif)
 - Users can decide on the number of gradient points they want to use.
 - Users can use the color picker to provide RGBs.
+
+![tool2](https://user-images.githubusercontent.com/33141219/188221460-370cfefc-b1cd-47fa-954e-cf1114e21dca.gif)
 
 ## Specification
 Create React App<br />
